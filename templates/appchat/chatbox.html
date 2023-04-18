@@ -1,0 +1,54 @@
+{% extends 'default.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_filters %}
+{% block title %}
+Вы сейчас в {{ room_name }} комнате
+{% endblock title %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        <div class="container">
+            <form>
+                <div class="form-group">
+                    <br>
+                    <img src="{{ user.profile.avatar.url }}" alt="Avatar" class="logo-image"
+                        style="float: left; width: 50px; height: 50px; border-radius: 15px;">
+                    <h3>Чат</h3>
+                    <br>
+                    <textarea class="form-control" id="chat-text" readonly rows="15"></textarea>
+                    <br>
+                </div>
+                <div class="form-group">
+                    {% csrf_token %}
+                    <input class="form-control" placeholder="Сообщение в общий чат" id="chat-message-input" type="text"/>
+                </div>
+                <div style="display: flex;">
+                <input class="btn btn-primary" id="chat-message-submit" type="button"
+                       style="width: 50%;" value="Отправить &#10548;"/>&nbsp;
+                <input class="btn btn-primary" id="leave-room-submit" type="button"
+                       style="width: 50%;" value="Покинуть комнату &#10549;"/>
+                </div><br>
+                <p>***</p>
+                <marquee direction="left" scrollamount="8"><h5>Чтобы отправить личное сообщение пользователю, выберите его из списка ниже</h5></marquee>
+                <div id="connections"></div>
+                <p>***</p>
+                <p>В комнате "{{ room_name }}" присутствуют:</p>
+                <div id="users-in-room">В комнате никого &#9940;</div>
+            </form>
+        </div>
+        {{ request.user.username|json_script:"user_username" }}
+        {{ room_name|json_script:"room-name" }}
+        <script src="{%  static 'js/chatbox.js' %}"></script>
+    {% else %}
+        <div class="container mt-3 p-5">
+            <div class="row">
+                <h2 class="center">Войдите или зарегистрируйтесь</h2>
+                <hr>
+                <a class="btn btn-primary" href="{% url 'login' %}">Вход</a>
+                <hr>
+                <a class="btn btn-primary" href="{% url 'signup' %}">Регистрация</a>
+            </div>
+        </div>
+    {% endif %}
+{% endblock content %}

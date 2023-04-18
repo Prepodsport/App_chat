@@ -1,0 +1,23 @@
+{% extends 'default.html' %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_filters %}
+{% block title %}
+Регистрация
+{% endblock title %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        <p>&nbsp;</p>
+        <h4><p>Вы уже вошли как {{ user.username }}!</p></h4>
+        <p>&nbsp;</p>
+    {% else %}
+        <h2>Регистрация</h2>
+        <hr>
+        <p>&nbsp;</p>
+        <form action="" method="post">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <input type="submit" class="btn btn-primary" value="Зарегистрироваться">
+        </form>
+    {% endif %}
+{% endblock content %}

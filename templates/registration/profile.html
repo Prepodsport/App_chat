@@ -1,0 +1,30 @@
+{% extends 'default.html' %}
+{% load crispy_forms_tags %}
+{% load crispy_forms_filters %}
+{% block title %}
+Профиль {{ user.username }}
+{% endblock title %}
+
+{% block content %}
+	<div class="content-section">
+        <div class="media">
+            <div class="media-body">
+            <p>&nbsp;</p>
+            <h2 class="account-heading">Профиль {{ user.username }}</h2>
+            <hr>
+            {% if user.profile.avatar %}
+                <img src="{{ user.profile.avatar.url }}" alt="avatar" style="max-height:300px">
+            {% endif %}
+            <p>&nbsp;</p>
+            <p class="text-secondary">Вы можете обновить свою учетную запись</p>
+            </div>
+        </div>
+        <form method="post" action="{% url 'profile' %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ user_form|crispy }}
+            {{ profile_form|crispy }}
+            <input type="submit" class="btn btn-primary" value="Сохранить">
+            <input type="hidden" name="next" value="{{ user }}">
+        </form>
+	</div>
+{% endblock content %}
